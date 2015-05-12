@@ -107,7 +107,7 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
 
         $swiftmailer = new SwiftMailer($mailer, $layout, $config);
 
-        $this->assertEquals($swiftmailer, $swiftmailer->type('default'));
+        $this->assertEquals($swiftmailer, $swiftmailer->load('default'));
         $this->assertEquals('default', $swiftmailer->getType());
 
     }
@@ -141,7 +141,7 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
 
         $swiftmailer = new SwiftMailer($mailer, $layout, $config);
 
-        $this->assertEquals($swiftmailer, $swiftmailer->type('custom'));
+        $this->assertEquals($swiftmailer, $swiftmailer->load('custom'));
         $this->assertEquals('custom', $swiftmailer->getType());
 
     }
