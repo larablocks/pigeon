@@ -1,0 +1,40 @@
+{
+    "name": "larablocks/pigeon",
+    "type": "library",
+    "description": "A more flexible email message builder for Laravel 5 including chained methods, reusable message type configurations, and email layout and template view management.",
+    "keywords": [
+        "mailer","laravel","mail","email","message","template","views","blade","builder","pigeon"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eric Mitkowski",
+            "email": "eric@larablocks.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "illuminate/mail": "5.0.*",
+        "illuminate/log": "5.0.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "mockery/mockery": "~0.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Larablocks\\Pigeon\\": "src/Pigeon"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Larablocks\\Pigeon\\PHPUnit\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
