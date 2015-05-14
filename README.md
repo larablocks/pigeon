@@ -9,12 +9,12 @@ Add `larablocks/pigeon` as a requirement to `composer.json`:
 ```javascript
 {
     "require": {
-        "larablocks/pigeon": "5.0.*"
+        "larablocks/pigeon": "0.2.*"
     }
 }
 ```
 
-Note: All Larablocks packages will have versions in line with the laravel framework.
+Note: All Larablocks packages will have versions in line with the core Laravel framework.
 
 Update your packages with `composer update` or install with `composer install`.
 
@@ -26,13 +26,14 @@ To wire this up in your Laravel project you need to add the service provider. Op
 'Larablocks\Pigeon\PigeonServiceProvider',
 ```
 
-Then, add a Facade for more convenient usage. In your `app.php` config file add the following line to the `aliases` array.
-Note: The Pigeon facade will load automatically, so you don't have to add it to the `app.php` file but you may still want 
-to keep record of the alias.
+Then you may add a Facade for more convenient usage. In your `app.php` config file add the following line to the `aliases` array.
 
 ```php
 'Pigeon' => 'Larablocks\Pigeon\Pigeon',
 ```
+
+Note: The Pigeon facade will load automatically, so you don't have to add it to the `app.php` file but you may still want 
+to keep record of the alias.
 
 To publish the default config file `config/pigeon.php` along with the default email view files use the artisan command: 
 
@@ -48,12 +49,9 @@ If you wish to not publish the view files and only publish the config then use t
 Pigeon::
 ```
 
-When Pigeon is used as a facade, each access to the facade will create a new instance of Pigeon therefore all message
-properties will be reset to default for each call.
-
 ### Setting the Message Properties
 
-Pigeon will load all properties set in the `default` area of your config before you start to manipulate the properties.
+Pigeon will load all properties set in the `default` area of your config before you construct your message.
 
 ####Set layout view file:
 ```php
@@ -76,8 +74,7 @@ Pigeon::to(['john.doe@domain.com', 'jane.doe@domain.com'])
 
 ####Set "CC" address or array of "CC" addresses:
 ```php
-Pigeon::cc('jane.doe@domain.com') // set the cc address or array of cc addresses
-```
+Pigeon::cc('jane.doe@domain.com')
 or
 ```php
 Pigeon::cc(['john.doe@domain.com', 'jane.doe@domain.com']) 
@@ -85,7 +82,7 @@ Pigeon::cc(['john.doe@domain.com', 'jane.doe@domain.com'])
 
 ####Set "BCC" address or array of "BCC" addresses:
 ```php
-Pigeon::bcc('jane.doe@domain.com') // set the cc address or array of cc addresses
+Pigeon::bcc('jane.doe@domain.com')
 ```
 or
 ```php
@@ -94,7 +91,7 @@ Pigeon::bcc(['john.doe@domain.com', 'jane.doe@domain.com'])
 
 ####Set Subject:
 ```php
-Pigeon::subject('This is the Subject') 
+Pigeon::subject('My Subject') 
 ```
 
 ####File Attachment:
@@ -106,22 +103,26 @@ Pigeon::attach('/path/to/file/attachment')
 ```php
 Pigeon::pass(['firstVariable' => 'test string', 'secondVariable' => 2, 'thirdVariable' => true])
 ```
-Note: Make sure all variables defined in your layout and template view files are passed.
-
+Note: Make sure all variables pre-defined in your layout and template view files are passed to your Pigeon message.
 
 ####Using Pretend:
 ```php
 Pigeon::pretend()
 ```
+
 This will set the pretend function of Swift Mailer to true so message will be not actually be mailed.
 See http://laravel.com/docs/5.0/mail#mail-and-local-development
 
-### Custom Messages
+### Custom Messages Types
+
+Custom message types will be configured in the `config/pigeon.php` file. In this file you can find examples on how 
+to properly set up a custom message type.
 
 ####Load Custom Message:
 ```php
-Pigeon::load('custom_message_type');
+Pigeon::type('custom_message_type');
 ```
+
 This will load all the message properties from your config defined for `custom_message_type`.
 
 ### Sending the Message
@@ -133,8 +134,9 @@ Pigeon::send();
 
 ####Send Raw Message:
 ```php
-Pigeon::send('This is my raw message);
+Pigeon::send('This is my raw message');
 ```
+
 Using a raw message will ignore any view files set and variables passed and only send whats in string param passed.
 
 
@@ -154,16 +156,18 @@ Pigeon::to('me@domain.com')->subject('Testing Pigeon')->send('Sending myself a q
 ### Example - Sending a custom message
 
 ```php
-Pigeon::load('custom_message_type')->send();
+Pigeon::type('test_message')->to('me@domain.com')->send();
 ```
 
 ## Usage as a Passed Dependency
 
-When Pigeon is injected into a you will be reusing the instance and therefore you must be careful to call start on 
-each new message creation to not have properties persist to the next send.
+To pass Pigeon as a dependency will will pass the interface `Larablocks\Pigeon\PigeonInterface`. For now the only library 
+that implements this interface is `Larablocks\Pigeon\SwiftMailer` but we want to allow for other mailing libraries to be used in the future.
+The `config/pigeon.php` config file for Pigeon automatically sets SwiftMailer as the default mailer library for you.
 
-We will use the implements the `Larablocks\Pigeon\PigeonInterface`. For now the only library that we use to implment this
-interface is `Larablocks\Pigeon\SwiftMailer`.
+```php
+'library' => 'SwiftMailer',
+```
 
 ###Passing Pigeon to a constructor:
 ```php
@@ -176,29 +180,12 @@ $this->pigeon = $pigeon;
 ###Starting a new default message:
 
 ```php
-$this->pigeon->start()->to('me@domain.com')->subject('Testing Pigeon')->send('Sending myself a quick raw message');
+$this->pigeon->to('me@domain.com')->subject('Pigeon Raw Test Message')->send('Sending myself a quick raw message');
 ```
-
-See how we use the start() method here to make sure the properties from the first send are cleared before we send any subsequent
-messages. You may use the fact that the properties persist to your advantage to fire off multiple email types to the same
-address for example:
 
 ###Starting a new custom message type:
 ```php
-$this->pigeon->start('my_custom_message')->send();
-```
-
-Start() can receive a param for the custom message type so we can clear any properties from the last send and load the configs for that message type
-at the same time.
-
-
-### Example - Sending multiple message types to the same address
-
-```php
-$pigeon->load('first_custom_message')->to('john.doe@domain.com')->send();
-```
-```php
-$pigeon->load('second_custom_message')->send();
+$this->pigeon->type('test_message')->to('me@domain.com')->send();
 ```
 
 ## License

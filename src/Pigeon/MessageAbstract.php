@@ -97,40 +97,17 @@ abstract class MessageAbstract
     }
 
     /**
-     * Start New Message
-     *
-     * @param $message_type (set in config file)
-     * @return $this
-     */
-    public function start($message_type = null)
-    {
-        // First reset message
-        $this->resetMessage();
-
-        // Assign new message type
-        if (!is_null($message_type)) {
-            $this->load($message_type);
-        } else {
-            $this->loadConfigType('default');
-        }
-
-        return $this;
-    }
-
-
-    /**
      * Load Message Type
      *
      * @param $message_type (set in config file)
      * @return $this
      */
-    public function load($message_type)
+    public function type($message_type)
     {
         $this->loadConfigType($message_type);
 
         return $this;
     }
-
 
     /**
      * Get Message Type
@@ -155,7 +132,6 @@ abstract class MessageAbstract
         return $this;
     }
 
-
     /**
      * Set Email Template
      *
@@ -168,7 +144,6 @@ abstract class MessageAbstract
 
         return $this;
     }
-
 
     /**
      * Set To
@@ -390,11 +365,23 @@ abstract class MessageAbstract
     }
 
     /**
+     * Restore Message to Default Configs
+     *
+     * @throws InvalidMessageTypeException
+     * @throws UnknownMessageTypeException
+     */
+    protected function restoreDefaultMessageType()
+    {
+        $this->resetMessage();
+        $this->loadConfigType('default');
+    }
+
+    /**
      * Reset Message Properties to empty
      */
     private function resetMessage()
     {
-        $this->message_type = '';
+        $this->subject = '';
         $this->to = [];
         $this->cc = [];
         $this->bcc = [];

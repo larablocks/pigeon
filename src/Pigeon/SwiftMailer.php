@@ -60,6 +60,9 @@ class SwiftMailer extends MessageAbstract implements PigeonInterface
             $send_result = $this->sendMessage();
         }
 
+        // Reset to default after send
+        $this->restoreDefaultMessageType();
+
         // Turn pretend back to global config after send
         $this->mailer->pretend($this->config->get('mail.pretend'));
 

@@ -43,15 +43,20 @@ return [
      *    'user_welcome' => [
      *      'layout' => 'emails.layouts.customer',
      *      'template' => 'emails.templates.customer.welcome',
-     *      'subject' => 'Welcome New Customer'
-     *      'cc' => ['john.doe@myapp.com', 'jane.doe@myapp.com']
-     *      'bcc' => 'customerservice@myapp.com'
-     *      'message_variables' = []
+     *      'subject' => 'Welcome New Customer',
+     *      'cc' => ['john.doe@myapp.com', 'jane.doe@myapp.com'],
+     *      'bcc' => 'customerservice@myapp.com',
+     *      'message_variables' = ['appName' => 'My App', 'appUrl' => 'www.myapp.com']
      *    ]
      *
      */
     'message_types' => [
-
+        /* Message Type Test - can remove after testing */
+        'test_message' => [
+            'layout' => 'emails.layouts.default',
+            'template' => 'emails.templates.default',
+            'subject' => 'Pigeon Test Message'
+        ]
     ]
 ];
 
