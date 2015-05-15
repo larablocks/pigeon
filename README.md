@@ -37,11 +37,11 @@ to keep record of the alias.
 
 To publish the default config file `config/pigeon.php` along with the default email view files use the artisan command: 
 
-`vendor:publish --vendor="Larablocks\Pigeon\PigeonServiceProvider"`
+`php artisan vendor:publish --provider="Larablocks\Pigeon\PigeonServiceProvider"`
 
 If you wish to not publish the view files and only publish the config then use the artisan command:
 
-`vendor:publish --vendor="Larablocks\Pigeon\PigeonServiceProvider" --tag="config"`
+`php artisan vendor:publish --vendor="Larablocks\Pigeon\PigeonServiceProvider" --tag="config"`
 
 ## Usage as a Facade
 

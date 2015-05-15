@@ -45,9 +45,10 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
         $layout = m::mock('Larablocks\Pigeon\MessageLayout');
         $layout->shouldReceive('getViewLayout')->once()->andReturn('emails.layouts.default');
         $layout->shouldReceive('getMessageVariables')->once()->andReturn([]);
+        $layout->shouldReceive('clearVariables')->once();
 
         $config = m::mock('Illuminate\Config\Repository');
-        $config->shouldReceive('get')->once()->andReturn(['default' => [
+        $config->shouldReceive('get')->times(3)->andReturn(['default' => [
             'layout' => 'emails.layouts.default',
             'template' => 'emails.templates.default',
             'subject' => 'Pigeon Delivery',
@@ -56,7 +57,6 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
             'bcc' => [],
             'message_variables' => []
         ]]);
-        $config->shouldReceive('get')->once()->andReturn(true);
 
         $swiftmailer = new SwiftMailer($mailer, $layout, $config);
 
@@ -70,9 +70,10 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
         $mailer->shouldReceive('raw')->once()->andReturn(true);
 
         $layout = m::mock('Larablocks\Pigeon\MessageLayout');
+        $layout->shouldReceive('clearVariables')->once();
 
         $config = m::mock('Illuminate\Config\Repository');
-        $config->shouldReceive('get')->once()->andReturn(['default' => [
+        $config->shouldReceive('get')->times(3)->andReturn(['default' => [
             'layout' => 'emails.layouts.default',
             'template' => 'emails.templates.default',
             'subject' => 'Pigeon Delivery',
@@ -81,7 +82,6 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
             'bcc' => [],
             'message_variables' => []
         ]]);
-        $config->shouldReceive('get')->once()->andReturn(true);
 
         $swiftmailer = new SwiftMailer($mailer, $layout, $config);
 
@@ -107,7 +107,7 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
 
         $swiftmailer = new SwiftMailer($mailer, $layout, $config);
 
-        $this->assertEquals($swiftmailer, $swiftmailer->load('default'));
+        $this->assertEquals($swiftmailer, $swiftmailer->type('default'));
         $this->assertEquals('default', $swiftmailer->getType());
 
     }
@@ -141,8 +141,60 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
 
         $swiftmailer = new SwiftMailer($mailer, $layout, $config);
 
-        $this->assertEquals($swiftmailer, $swiftmailer->load('custom'));
+        $this->assertEquals($swiftmailer, $swiftmailer->type('custom'));
         $this->assertEquals('custom', $swiftmailer->getType());
 
+    }
+
+    public function testBuildingMessage()
+    {
+        $mailer = m::mock('Illuminate\Mail\Mailer');
+
+        $layout = m::mock('Larablocks\Pigeon\MessageLayout');
+        $layout->shouldReceive('setViewLayout')->once();
+        $layout->shouldReceive('setViewTemplate')->once();
+        $layout->shouldReceive('includeVariables')->once();
+        $layout->shouldReceive('clearVariables')->once();
+
+        $config = m::mock('Illuminate\Config\Repository');
+        $config->shouldReceive('get')->once()->andReturn(['default' => [
+            'layout' => 'emails.layouts.default',
+            'template' => 'emails.templates.default',
+            'subject' => 'Pigeon Delivery',
+            'to' => [],
+            'cc' => [],
+            'bcc' => [],
+            'message_variables' => []
+        ]]);
+
+        $swiftmailer = new SwiftMailer($mailer, $layout, $config);
+
+        // Test Setting Layout
+        $this->assertEquals($swiftmailer, $swiftmailer->layout('emails.layouts.default'));
+
+        // Test Setting Template
+        $this->assertEquals($swiftmailer, $swiftmailer->template('emails.templates.default'));
+
+        // Test Setting To
+        $this->assertEquals($swiftmailer, $swiftmailer->to('john.doe@domain.com'));
+        $this->assertEquals($swiftmailer, $swiftmailer->to(['john.doe@domain.com', 'jane.doe@domain.com']));
+
+        // Test Setting cc
+        $this->assertEquals($swiftmailer, $swiftmailer->cc('john.doe@domain.com'));
+        $this->assertEquals($swiftmailer, $swiftmailer->cc(['john.doe@domain.com', 'jane.doe@domain.com']));
+
+        // Test Setting bcc
+        $this->assertEquals($swiftmailer, $swiftmailer->bcc('john.doe@domain.com'));
+        $this->assertEquals($swiftmailer, $swiftmailer->bcc(['john.doe@domain.com', 'jane.doe@domain.com']));
+
+        // Test Setting subject
+        $this->assertEquals($swiftmailer, $swiftmailer->subject('Test Subject'));
+
+        // Test Setting subject
+        $this->assertEquals($swiftmailer, $swiftmailer->pass(['variableOne' => 'One', 'variableTwo' => 'two']));
+
+        // Test Setting subject
+        $this->assertEquals($swiftmailer, $swiftmailer->clear());
+        
     }
 }

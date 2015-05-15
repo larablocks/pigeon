@@ -165,19 +165,6 @@ abstract class MessageAbstract
     }
 
     /**
-     * Set Subject
-     *
-     * @param $subject
-     * @return $this|object
-     */
-    public function subject($subject)
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
-    /**
      * Adds a Carbon Copy(CC) address
      *
      * @param $address
@@ -215,6 +202,18 @@ abstract class MessageAbstract
         return $this;
     }
 
+    /**
+     * Set Subject
+     *
+     * @param $subject
+     * @return $this|object
+     */
+    public function subject($subject)
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
 
     /**
      * Pass Message variables
