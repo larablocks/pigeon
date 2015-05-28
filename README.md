@@ -9,7 +9,7 @@ Add `larablocks/pigeon` as a requirement to `composer.json`:
 ```javascript
 {
     "require": {
-        "larablocks/pigeon": "0.2.*"
+        "larablocks/pigeon": "5.0.*"
     }
 }
 ```
@@ -41,7 +41,7 @@ To publish the default config file `config/pigeon.php` along with the default em
 
 If you wish to not publish the view files and only publish the config then use the artisan command:
 
-`php artisan vendor:publish --vendor="Larablocks\Pigeon\PigeonServiceProvider" --tag="config"`
+`php artisan vendor:publish --provider="Larablocks\Pigeon\PigeonServiceProvider" --tag="config"`
 
 ## Usage as a Facade
 
@@ -49,19 +49,9 @@ If you wish to not publish the view files and only publish the config then use t
 Pigeon::
 ```
 
-### Setting the Message Properties
+### Setting the Message's General Properties
 
 Pigeon will load all properties set in the `default` area of your config before you construct your message.
-
-####Set layout view file:
-```php
-Pigeon::layout('emails.layout.my_layout_view')
-```
-
-####Set template view file:
-```php
-Pigeon::template('emails.layout.my_template_view')
-```
 
 ####Set "to" address or array of "to" addresses:
 ```php
@@ -75,6 +65,7 @@ Pigeon::to(['john.doe@domain.com', 'jane.doe@domain.com'])
 ####Set "CC" address or array of "CC" addresses:
 ```php
 Pigeon::cc('jane.doe@domain.com')
+```
 or
 ```php
 Pigeon::cc(['john.doe@domain.com', 'jane.doe@domain.com']) 
@@ -89,23 +80,70 @@ or
 Pigeon::bcc(['john.doe@domain.com', 'jane.doe@domain.com']) 
 ```
 
+####Set "replyTo" address:
+```php
+Pigeon::replyTo('reply@domain.com') 
+```
+
 ####Set Subject:
 ```php
 Pigeon::subject('My Subject') 
 ```
 
 ####File Attachment:
+
+Attach a single file with no options
 ```php
 Pigeon::attach('/path/to/file/attachment')
 ```
 
+Attach a single file with options
+```php
+Pigeon::attach('/path/to/file/attachment', ['as' => 'Attachment', 'mime' => 'jpg'])
+```
+
+Attach an array of files
+```php
+Pigeon::attach([
+    [
+     'path' => '/path/to/file/attachment1'
+     'options' => []
+    ],
+    [
+     'path' => '/path/to/file/attachment2'
+     'options' => ['as' => 'Attachment 2', 'mime' => 'pdf']
+    ]
+])
+```
+
+### Setting the Message's View Properties
+
+####Set layout view file:
+```php
+Pigeon::layout('emails.layouts.my_layout_view')
+```
+
+####Set template view file:
+```php
+Pigeon::template('emails.templates.my_template_view')
+```
+
 ####Passing View Variables:
 ```php
-Pigeon::pass(['firstVariable' => 'test string', 'secondVariable' => 2, 'thirdVariable' => true])
+Pigeon::pass([
+ 'firstVariable' => 'test string', 
+ 'secondVariable' => 2, 
+ 'thirdVariable' => true
+])
 ```
 Note: Make sure all variables pre-defined in your layout and template view files are passed to your Pigeon message.
 
-####Using Pretend:
+####Clearing View Variables
+```php
+Pigeon::clear()
+```
+
+###Using Pretend:
 ```php
 Pigeon::pretend()
 ```
@@ -143,8 +181,15 @@ Using a raw message will ignore any view files set and variables passed and only
 ### Example - Using it all together
 
 ```php
-Pigeon::layout('emails.layout.my_layout_view')->template('emails.layout.my_template_view')->to(['john.doe@domain.com', 'jane.doe@domain.com'])->cc('fred.doe@domain.com')
-->bcc('george.doe@domain.com')-subject('This is the Subject')->attach('/path/to/file/attachment')->pass(['firstVariable' => 'test string', 'secondVariable' => 2, 'thirdVariable' => true])->send();
+Pigeon::to(['john.doe@domain.com', 'jane.doe@domain.com'])
+->cc('fred.doe@domain.com')
+->bcc('george.doe@domain.com')
+->subject('This is the Subject')
+->attach('/path/to/file/attachment')
+->layout('emails.layouts.my_layout_view')
+->template('emails.templates.my_template_view')
+->pass(['firstVariable' => 'test string', 'secondVariable' => 2, 'thirdVariable' => true])
+->send();
 ```
 
 ### Example - Simple call

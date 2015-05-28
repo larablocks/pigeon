@@ -1,7 +1,6 @@
 <?php namespace Larablocks\Pigeon;
 
 use Illuminate\Config\Repository as Config;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class MessageAbstract
@@ -25,7 +24,7 @@ abstract class MessageAbstract
     /**
      * Config instance
      *
-     * @Illuminate\Support\Facades\Config
+     * @Illuminate\Config\Repository
      */
     protected $config;
 
@@ -72,6 +71,13 @@ abstract class MessageAbstract
      * @string array
      */
     protected $bcc = [];
+
+    /**
+     * Reply To Address
+     *
+     * @string
+     */
+    protected $reply_to = null;
 
     /**
      * File Attachments
@@ -203,6 +209,19 @@ abstract class MessageAbstract
     }
 
     /**
+     * Adds a Reply To address
+     *
+     * @param $address
+     * @return $this|object
+     */
+    public function replyTo($address)
+    {
+        $this->reply_to = $address;
+
+        return $this;
+    }
+
+    /**
      * Set Subject
      *
      * @param $subject
@@ -250,25 +269,30 @@ abstract class MessageAbstract
      */
     public function attach($pathToFile, array $options = [])
     {
-        $attachment['path'] = base_path().$pathToFile;
-        $attachment['options'] = $options;
+        if (is_array($pathToFile)) {
+            foreach($pathToFile as $attachment) {
 
-        array_push($this->attachments, $attachment);
+                if (isset($attachment['options']) && array_key_exists("options", $attachment)) {
+                    $options = $attachment['options'];
+                } else {
+                    $options = [];
+                }
+                $this->addAttachment($attachment['path'], $options);
+            }
+        } else {
+            $this->addAttachment($pathToFile, $options);
+        }
 
         return $this;
     }
 
-    /**
-     * Log Warning if subject is not set
-     *
-     */
-    protected function subjectWarning()
+    private function addAttachment($pathToFile, array $options = [])
     {
-        if (empty($this->subject) || $this->subject === '') {
-            //Log::warning('Pigeon sent a message without a subject.');
-        }
-    }
+        $attachment['path'] = $pathToFile;
+        $attachment['options'] = $options;
 
+        array_push($this->attachments, $attachment);
+    }
 
     /**
      * Adds array of addresses to type
@@ -354,6 +378,12 @@ abstract class MessageAbstract
      */
     private function setConfigOption($option_type, $option_value)
     {
+        if ($option_type === 'message_variables') {
+            $option_type = 'pass';
+        } else if ($option_type === 'attachments') {
+            $option_type = 'attach';
+        }
+
         if (!method_exists($this, $option_type)) {
             return false;
         }
@@ -386,15 +416,5 @@ abstract class MessageAbstract
         $this->bcc = [];
         $this->attachments = [];
         $this->message_layout->clearVariables();
-    }
-
-    /**
-     * Function to allow message variables in config to point to the pass() function for variables
-     *
-     * @param $message_variables
-     */
-    private function message_variables($message_variables)
-    {
-        $this->pass($message_variables);
     }
 }

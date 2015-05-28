@@ -18,12 +18,14 @@ return [
      *
      */
     'default' => [
-        'layout' => 'emails.layouts.default',
-        'template' => 'emails.templates.default',
-        'subject' => 'Pigeon Delivery',
         'to' => [],
         'cc' => [],
         'bcc' => [],
+        'replyTo' => null,
+        'subject' => 'Pigeon Delivery',
+        'attachments' => [],
+        'layout' => 'emails.layouts.default',
+        'template' => 'emails.templates.default',
         'message_variables' => []
     ],
 
@@ -31,22 +33,34 @@ return [
      * Set default configs for specific message types.
      *
      * ---Option types---
-     * layout - view file path,
-     * template - view file path',
-     * subject - string',
      * to - single or array of email address
      * cc - single or array of email address
      * bcc - single or array of email address
+     * replyTo - email address
+     * subject - string
+     * attachments - array of attachments
+     * layout - view file path
+     * template - view file path
      * message_variables - array of message variables
+
      *
      * Ex.
      *    'user_welcome' => [
-     *      'layout' => 'emails.layouts.customer',
-     *      'template' => 'emails.templates.customer.welcome',
-     *      'subject' => 'Welcome New Customer',
+     *
      *      'cc' => ['john.doe@myapp.com', 'jane.doe@myapp.com'],
      *      'bcc' => 'customerservice@myapp.com',
-     *      'message_variables' = ['appName' => 'My App', 'appUrl' => 'www.myapp.com']
+     *      'subject' => 'Welcome New Customer',
+     *      'replyTo' => 'contact@myapp.com',
+     *      'attachments' => [
+     *           'path' => base_path().'/public/files/test.pdf',
+     *           'options' => [
+     *               'as' => 'My Test PDF'
+     *           ]
+     *       ],
+     *      'layout' => 'emails.layouts.customer',
+     *      'template' => 'emails.templates.customer.welcome',
+     *      'message_variables' = ['appName' => 'My App', 'appUrl' => 'www.myapp.com'],
+     *
      *    ]
      *
      */

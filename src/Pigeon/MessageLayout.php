@@ -93,9 +93,9 @@ class MessageLayout
     /**
      * Assign Message Variables
      *
-     * @param $message_variables
+     * @param array $message_variables
      */
-    public function includeVariables($message_variables)
+    public function includeVariables(array $message_variables)
     {
         // Remove the default template variable key from any variable assignments
         unset($message_variables[self::TEMPLATE_VARIABLE]);
