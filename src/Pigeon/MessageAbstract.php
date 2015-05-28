@@ -77,7 +77,7 @@ abstract class MessageAbstract
      *
      * @string
      */
-    protected $reply_to = null;
+    protected $reply_to = [];
 
     /**
      * File Attachments
@@ -155,17 +155,16 @@ abstract class MessageAbstract
      * Set To
      *
      * @param $address
+     * @param null $name
      * @return $this
      */
-    public function to($address)
+    public function to($address, $name = null)
     {
         if (is_array($address)) {
             $this->addAddressArray($address, 'to');
         } else {
-            array_push($this->to, $address);
+            $this->to[$address] = $name;
         }
-
-        $this->to = array_unique($this->to);
 
         return $this;
     }
@@ -174,17 +173,16 @@ abstract class MessageAbstract
      * Adds a Carbon Copy(CC) address
      *
      * @param $address
+     * @param null $name
      * @return $this|object
      */
-    public function cc($address)
+    public function cc($address, $name = null)
     {
         if (is_array($address)) {
             $this->addAddressArray($address, 'cc');
         } else {
-            array_push($this->cc, $address);
+            $this->cc[$address] = $name;
         }
-
-        $this->cc = array_unique($this->cc);
 
         return $this;
     }
@@ -193,17 +191,16 @@ abstract class MessageAbstract
      * Adds a Blind Carbon Copy(BCC) address
      *
      * @param $address
+     * @param null $name
      * @return $this|object
      */
-    public function bcc($address)
+    public function bcc($address, $name = null)
     {
         if (is_array($address)) {
             $this->addAddressArray($address, 'bcc');
         } else {
-            array_push($this->bcc, $address);
+            $this->bcc[$address] = $name;
         }
-
-        $this->bcc = array_unique($this->bcc);
 
         return $this;
     }
@@ -212,11 +209,16 @@ abstract class MessageAbstract
      * Adds a Reply To address
      *
      * @param $address
+     * @param null $name
      * @return $this|object
      */
-    public function replyTo($address)
+    public function replyTo($address, $name = null)
     {
-        $this->reply_to = $address;
+        if (is_array($address)) {
+            $this->addAddressArray($address, 'replyTo');
+        } else {
+            $this->reply_to[$address] = $name;
+        }
 
         return $this;
     }
@@ -303,15 +305,16 @@ abstract class MessageAbstract
      */
     private function addAddressArray(array $address_array, $type)
     {
-        foreach ($address_array as $address) {
-            if ($type === 'to') {
-                $this->to($address);
-            } else if ($type === 'cc') {
-                $this->cc($address);
-            } else if ($type === 'bcc') {
-                $this->bcc($address);
+        foreach ($address_array as $address => $name) {
+
+            if (!method_exists($this, $type)) {
+                return false;
+            }
+
+            if (is_int($address)) {
+                $this->$type($name);
             } else {
-                // Invalid Address Type
+                $this->$type($address, $name);
             }
         }
 

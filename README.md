@@ -49,40 +49,38 @@ If you wish to not publish the view files and only publish the config then use t
 Pigeon::
 ```
 
-### Setting the Message's General Properties
+### Setting the General Message Properties
 
 Pigeon will load all properties set in the `default` area of your config before you construct your message.
 
-####Set "to" address or array of "to" addresses:
+####Set addresses
+
+All these address add methods can be used with any of the address add functions (to, cc, bcc, replyTo)
+
+Add a single address with no name
 ```php
 Pigeon::to('john.doe@domain.com') 
+Pigeon::cc('john.doe@domain.com') 
+Pigeon::bcc('john.doe@domain.com') 
+Pigeon::replyTo('john.doe@domain.com') 
 ```
-or
+
+Add a single address with name
+```php
+Pigeon::to('john.doe@domain.com', 'John Doe')
+....
+```
+
+Add array of addresses with no names
 ```php
 Pigeon::to(['john.doe@domain.com', 'jane.doe@domain.com']) 
+...
 ```
 
-####Set "CC" address or array of "CC" addresses:
+Add array of addresses some with names, some without names
 ```php
-Pigeon::cc('jane.doe@domain.com')
-```
-or
-```php
-Pigeon::cc(['john.doe@domain.com', 'jane.doe@domain.com']) 
-```
-
-####Set "BCC" address or array of "BCC" addresses:
-```php
-Pigeon::bcc('jane.doe@domain.com')
-```
-or
-```php
-Pigeon::bcc(['john.doe@domain.com', 'jane.doe@domain.com']) 
-```
-
-####Set "replyTo" address:
-```php
-Pigeon::replyTo('reply@domain.com') 
+Pigeon::to(['john.doe@domain.com' => 'John Doe', 'jane.doe@domain.com']) 
+...
 ```
 
 ####Set Subject:
@@ -90,7 +88,7 @@ Pigeon::replyTo('reply@domain.com')
 Pigeon::subject('My Subject') 
 ```
 
-####File Attachment:
+####File Attachments:
 
 Attach a single file with no options
 ```php
@@ -116,7 +114,7 @@ Pigeon::attach([
 ])
 ```
 
-### Setting the Message's View Properties
+### Setting the Message View Properties
 
 ####Set layout view file:
 ```php

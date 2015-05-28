@@ -21,7 +21,7 @@ return [
         'to' => [],
         'cc' => [],
         'bcc' => [],
-        'replyTo' => null,
+        'replyTo' => [],
         'subject' => 'Pigeon Delivery',
         'attachments' => [],
         'layout' => 'emails.layouts.default',
@@ -48,9 +48,9 @@ return [
      *    'user_welcome' => [
      *
      *      'cc' => ['john.doe@myapp.com', 'jane.doe@myapp.com'],
-     *      'bcc' => 'customerservice@myapp.com',
-     *      'subject' => 'Welcome New Customer',
+     *      'bcc' => ['customerservice@myapp.com' => 'Customer Service'],
      *      'replyTo' => 'contact@myapp.com',
+     *      'subject' => 'Welcome New Customer',
      *      'attachments' => [
      *           'path' => base_path().'/public/files/test.pdf',
      *           'options' => [

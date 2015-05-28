@@ -105,28 +105,44 @@ class SwiftMailerTest extends PHPUnit_Framework_TestCase
 
         // Test to
         $swiftmailer->to('john.doe@domain.com');
-        $this->assertAttributeEquals(['john.doe@domain.com'], 'to', $swiftmailer);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null], 'to', $swiftmailer);
 
-        $swiftmailer->to(['jane.doe@domain.com','fred.doe@gmail.com']);
-        $this->assertAttributeEquals(['john.doe@domain.com', 'jane.doe@domain.com','fred.doe@gmail.com'], 'to', $swiftmailer);
+        $swiftmailer->to('jim.doe@domain.com', 'Jim Doe');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe'], 'to', $swiftmailer);
+
+        $swiftmailer->to(['jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com']);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe', 'jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com' => null], 'to', $swiftmailer);
 
         // Test cc
         $swiftmailer->cc('john.doe@domain.com');
-        $this->assertAttributeEquals(['john.doe@domain.com'], 'cc', $swiftmailer);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null], 'cc', $swiftmailer);
 
-        $swiftmailer->cc(['jane.doe@domain.com','fred.doe@gmail.com']);
-        $this->assertAttributeEquals(['john.doe@domain.com', 'jane.doe@domain.com','fred.doe@gmail.com'], 'cc', $swiftmailer);
+        $swiftmailer->cc('jim.doe@domain.com', 'Jim Doe');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe'], 'cc', $swiftmailer);
+
+        $swiftmailer->cc(['jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com']);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe', 'jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com' => null], 'cc', $swiftmailer);
 
         // Test bcc
         $swiftmailer->bcc('john.doe@domain.com');
-        $this->assertAttributeEquals(['john.doe@domain.com'], 'bcc', $swiftmailer);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null], 'bcc', $swiftmailer);
 
-        $swiftmailer->bcc(['jane.doe@domain.com','fred.doe@gmail.com']);
-        $this->assertAttributeEquals(['john.doe@domain.com', 'jane.doe@domain.com','fred.doe@gmail.com'], 'bcc', $swiftmailer);
+        $swiftmailer->bcc('jim.doe@domain.com', 'Jim Doe');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe'], 'bcc', $swiftmailer);
+
+        $swiftmailer->bcc(['jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com']);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe', 'jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com' => null], 'bcc', $swiftmailer);
 
         // Test replyTo
-        $swiftmailer->replyTo('contact@domain.com');
-        $this->assertAttributeEquals('contact@domain.com', 'reply_to', $swiftmailer);
+        $swiftmailer->replyTo('john.doe@domain.com');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null], 'reply_to', $swiftmailer);
+
+        $swiftmailer->replyTo('jim.doe@domain.com', 'Jim Doe');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe'], 'reply_to', $swiftmailer);
+
+        $swiftmailer->replyTo(['jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com']);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe', 'jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com' => null], 'reply_to', $swiftmailer);
+
 
         // Test subject
         $swiftmailer->subject('Test Subject');

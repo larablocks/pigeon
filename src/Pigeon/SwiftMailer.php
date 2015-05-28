@@ -93,11 +93,8 @@ class SwiftMailer extends MessageAbstract implements PigeonInterface
                 $message->to($this->to)
                     ->subject($this->subject)
                     ->cc($this->cc)
-                    ->bcc($this->bcc);
-
-                if (!is_null($this->reply_to)) {
-                    $message->replyTo($this->reply_to);
-                }
+                    ->bcc($this->bcc)
+                    ->replyTo($this->reply_to);
 
                 // Set all attachments
                 foreach ($this->attachments as $a) {
@@ -134,11 +131,8 @@ class SwiftMailer extends MessageAbstract implements PigeonInterface
                 $message->to($this->to)
                     ->subject($this->subject)
                     ->cc($this->cc)
-                    ->bcc($this->bcc);
-
-                if (!is_null($this->reply_to)) {
-                    $message->replyTo($this->reply_to);
-                }
+                    ->bcc($this->bcc)
+                    ->replyTo($this->reply_to);
 
                 // Set all attachments
                 foreach ($this->attachments as $a) {
