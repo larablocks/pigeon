@@ -50,11 +50,39 @@ interface PigeonInterface
 
     /**
      * Set To Address
-     *
-     * @param $email_address
-     * @return mixed
+     * @param $address
+     * @param null $name
+     * @return
      */
-    public function to($email_address);
+    public function to($address, $name = null);
+
+    /**
+     * Adds a Carbon Copy(CC) address
+     *
+     * @param $address
+     * @param null $name
+     * @return object
+     */
+    public function cc($address, $name = null);
+
+    /**
+     * Adds a Blind Carbon Copy(BCC) address
+     *
+     * @param $address
+     * @param null $name
+     * @return object
+     */
+    public function bcc($address, $name = null);
+
+
+    /**
+     * Adds a Reply To address
+     *
+     * @param $address
+     * @param null $name
+     * @return object
+     */
+    public function replyTo($address, $name = null);
 
     /**
      * Set Email Subject
@@ -63,22 +91,6 @@ interface PigeonInterface
      * @return object
      */
     public function subject($subject);
-
-    /**
-     * Adds a Carbon Copy(CC) address
-     *
-     * @param $address
-     * @return object
-     */
-    public function cc($address);
-
-    /**
-     * Adds a Blind Carbon Copy(BCC) address
-     *
-     * @param $address
-     * @return object
-     */
-    public function bcc($address);
 
     /**
      * Pass Message variables

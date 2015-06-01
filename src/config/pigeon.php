@@ -5,10 +5,10 @@ return [
     /*
      * Choose the Mailer Library for Pigeon.
      *
-     * Current Options: ['SwiftMailer']
+     * Current Options: ['IlluminateMailer']
      *
      */
-    'library' => 'SwiftMailer',
+    'library' => 'IlluminateMailer',
 
     /*
      * Choose Default Message Configs that will load for any Pigeon instance.

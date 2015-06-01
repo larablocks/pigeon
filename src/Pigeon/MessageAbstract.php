@@ -417,6 +417,7 @@ abstract class MessageAbstract
         $this->to = [];
         $this->cc = [];
         $this->bcc = [];
+        $this->reply_to = [];
         $this->attachments = [];
         $this->message_layout->clearVariables();
     }

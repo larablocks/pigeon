@@ -6,13 +6,13 @@ use Illuminate\Mail\Mailer;
 use Illuminate\Log\Writer as Logger;
 
 /**
- * Class SwiftMailer
+ * Class IlluminateMailer
  * @package Pigeon
  *
- * This class utilizes Laravel 5 Swift Mailer methods for Pigeon
+ * This class utilizes Laravel 5 Illuminate Mailer methods for Pigeon
  *
  */
-class SwiftMailer extends MessageAbstract implements PigeonInterface
+class IlluminateMailer extends MessageAbstract implements PigeonInterface
 {
     /**
      * Mailer instance
