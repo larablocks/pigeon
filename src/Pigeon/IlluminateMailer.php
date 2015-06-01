@@ -36,7 +36,7 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
     protected $pretend = false;
 
     /**
-     * Swift Mailer Constructor
+     * Illuminate Mailer Constructor
      *
      * @param Mailer $mailer
      * @param MessageLayout $message_layout
@@ -80,7 +80,7 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
 
 
     /**
-     * Send SwiftMail Message
+     * Send Message with View
      *
      * @return bool
      */
@@ -94,7 +94,12 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
                     ->subject($this->subject)
                     ->cc($this->cc)
                     ->bcc($this->bcc)
-                    ->replyTo($this->reply_to);
+                    ->replyTo($this->reply_to)
+                    ->sender($this->sender);
+
+                if (!empty($this->from)) {
+                    $message->from($this->from);
+                }
 
                 // Set all attachments
                 foreach ($this->attachments as $a) {
@@ -103,11 +108,11 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
             });
 
         } catch (ErrorException $e) {
-            $msg = 'SwiftMail could not send message: ' . $e->getMessage();
+            $msg = 'Pigeon could not send message: ' . $e->getMessage();
             $this->logger->error($msg);
             return false;
         } catch (\Swift_TransportException $e) {
-            $msg = 'SwiftMail SMTP is not working: ' . $e->getMessage();
+            $msg = 'SMTP failure: ' . $e->getMessage();
             $this->logger->error($msg);
             return false;
         }
@@ -117,7 +122,7 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
 
 
     /**
-     * Send SwiftMail Raw Message
+     * Send Raw Message
      *
      * @param $message
      * @return bool
@@ -132,7 +137,12 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
                     ->subject($this->subject)
                     ->cc($this->cc)
                     ->bcc($this->bcc)
-                    ->replyTo($this->reply_to);
+                    ->replyTo($this->reply_to)
+                    ->sender($this->sender);
+
+                if (!empty($this->from)) {
+                    $message->from($this->from);
+                }
 
                 // Set all attachments
                 foreach ($this->attachments as $a) {
@@ -140,11 +150,11 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
                 }
             });
         } catch (ErrorException $e) {
-            $msg = 'SwiftMail could not send message: ' . $e->getMessage();
+            $msg = 'Pigeon could not send message: ' . $e->getMessage();
             $this->logger->error($msg);
             return false;
         } catch (\Swift_TransportException $e) {
-            $msg = 'SwiftMail SMTP is not working: ' . $e->getMessage();
+            $msg = 'SMTP failure: ' . $e->getMessage();
             $this->logger->error($msg);
             return false;
         }
@@ -156,7 +166,7 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
      * Use Laravel pretend method and send mail to log file instead
      *
      * @param bool $value
-     * @return SwiftMailer
+     * @return Mailer
      */
     public function pretend($value = true)
     {

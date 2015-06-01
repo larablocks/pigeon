@@ -32,21 +32,22 @@ interface PigeonInterface
      */
     public function send($raw_message = null);
 
-    /**
-     * Set Email Layout
-     *
-     * @param $layout_path
-     * @return object
-     */
-    public function layout($layout_path);
 
     /**
-     * Set Email Template
-     *
-     * @param $template_path
-     * @return object
+     * Set From Address
+     * @param $address
+     * @param null $name
+     * @return
      */
-    public function template($template_path);
+    public function from($address, $name = null);
+
+    /**
+     * Set Sender Address
+     * @param $address
+     * @param null $name
+     * @return
+     */
+    public function sender($address, $name = null);
 
     /**
      * Set To Address
@@ -74,7 +75,6 @@ interface PigeonInterface
      */
     public function bcc($address, $name = null);
 
-
     /**
      * Adds a Reply To address
      *
@@ -91,6 +91,22 @@ interface PigeonInterface
      * @return object
      */
     public function subject($subject);
+
+    /**
+     * Set Email Layout
+     *
+     * @param $layout_path
+     * @return object
+     */
+    public function layout($layout_path);
+
+    /**
+     * Set Email Template
+     *
+     * @param $template_path
+     * @return object
+     */
+    public function template($template_path);
 
     /**
      * Pass Message variables

@@ -64,22 +64,30 @@ class IlluminateMailerTest extends PHPUnit_Framework_TestCase
     {
         $config = m::mock('Illuminate\Config\Repository');
         $config->shouldReceive('get')->once()->andReturn([
-            'layout' => 'emails.layouts.default',
-            'template' => 'emails.templates.default',
-            'subject' => 'Pigeon Delivery',
             'to' => [],
             'cc' => [],
             'bcc' => [],
+            'replyTo' => [],
+            'from' => [],
+            'sender' => [],
+            'attachments' => [],
+            'subject' => 'Pigeon Delivery',
+            'layout' => 'emails.layouts.default',
+            'template' => 'emails.templates.default',
             'message_variables' => []
         ]);
 
         $config->shouldReceive('get')->once()->andReturn([
-            'layout' => 'emails.layouts.custom',
-            'template' => 'emails.templates.custom',
-            'subject' => 'Custom Type',
             'to' => [],
             'cc' => [],
             'bcc' => [],
+            'replyTo' => [],
+            'from' => [],
+            'sender' => [],
+            'attachments' => [],
+            'subject' => 'Custom Subject',
+            'layout' => 'emails.layouts.custom',
+            'template' => 'emails.templates.custom',
             'message_variables' => ['custom' => 'Test Custom']
         ]);
 
@@ -93,7 +101,7 @@ class IlluminateMailerTest extends PHPUnit_Framework_TestCase
         // Test Correct Custom Configs
         $this->assertEquals($mailer, $mailer->type('custom'));
         $this->assertEquals('custom', $mailer->getType());
-        $this->assertAttributeEquals('Custom Type', 'subject', $mailer);
+        $this->assertAttributeEquals('Custom Subject', 'subject', $mailer);
 
         // Test Custom Config with bad option
         $this->assertEquals($mailer, $mailer->type('bad_custom'));
@@ -143,6 +151,25 @@ class IlluminateMailerTest extends PHPUnit_Framework_TestCase
         $mailer->replyTo(['jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com']);
         $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe', 'jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com' => null], 'reply_to', $mailer);
 
+        // Test from
+        $mailer->from('john.doe@domain.com');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null], 'from', $mailer);
+
+        $mailer->from('jim.doe@domain.com', 'Jim Doe');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe'], 'from', $mailer);
+
+        $mailer->from(['jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com']);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe', 'jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com' => null], 'from', $mailer);
+
+        // Test sender
+        $mailer->sender('john.doe@domain.com');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null], 'sender', $mailer);
+
+        $mailer->sender('jim.doe@domain.com', 'Jim Doe');
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe'], 'sender', $mailer);
+
+        $mailer->sender(['jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com']);
+        $this->assertAttributeEquals(['john.doe@domain.com' => null, 'jim.doe@domain.com' => 'Jim Doe', 'jane.doe@domain.com' => 'Jane Doe', 'fred.doe@gmail.com' => null], 'sender', $mailer);
 
         // Test subject
         $mailer->subject('Test Subject');
@@ -202,12 +229,16 @@ class IlluminateMailerTest extends PHPUnit_Framework_TestCase
     {
         $config = m::mock('Illuminate\Config\Repository');
         $config->shouldReceive('get')->zeroOrMoreTimes()->andReturn([
-            'layout' => 'emails.layouts.default',
-            'template' => 'emails.templates.default',
-            'subject' => 'Pigeon Delivery',
             'to' => [],
             'cc' => [],
             'bcc' => [],
+            'replyTo' => [],
+            'from' => [],
+            'sender' => [],
+            'attachments' => [],
+            'subject' => 'Pigeon Delivery',
+            'layout' => 'emails.layouts.default',
+            'template' => 'emails.templates.default',
             'message_variables' => []
         ]);
 

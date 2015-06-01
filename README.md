@@ -1,6 +1,12 @@
 Pigeon
 ===============
+
+[![Build Status](https://travis-ci.org/larablocks/pigeon.svg)](https://travis-ci.org/larablocks/pigeon)
+
 A more flexible email message builder for Laravel 5 including chained methods, reusable message type configurations, and email layout and template view management.
+
+> Note: All Larablocks packages will have releases in line with the major Laravel framework version release. 
+(Ex. Pigeon 5.0.* will work with Laravel 5.0.*)
 
 ## Installation
 
@@ -13,8 +19,6 @@ Add `larablocks/pigeon` as a requirement to `composer.json`:
     }
 }
 ```
-
-Note: All Larablocks packages will have versions in line with the core Laravel framework.
 
 Update your packages with `composer update` or install with `composer install`.
 
@@ -53,9 +57,9 @@ Pigeon::
 
 Pigeon will load all properties set in the `default` area of your config before you construct your message.
 
-####Set addresses
+####Set message addresses:
 
-All these address add methods can be used with any of the address add functions (to, cc, bcc, replyTo)
+All these address add methods can be used with any of the address add functions (to, cc, bcc, replyTo, from, sender)
 
 Add a single address with no name
 ```php
@@ -63,6 +67,8 @@ Pigeon::to('john.doe@domain.com')
 Pigeon::cc('john.doe@domain.com') 
 Pigeon::bcc('john.doe@domain.com') 
 Pigeon::replyTo('john.doe@domain.com') 
+Pigeon::from('john.doe@domain.com') 
+Pigeon::sender('john.doe@domain.com') 
 ```
 
 Add a single address with name
@@ -127,16 +133,35 @@ Pigeon::template('emails.templates.my_template_view')
 ```
 
 ####Passing View Variables:
+
+
+Passing simple variables:
 ```php
 Pigeon::pass([
- 'firstVariable' => 'test string', 
- 'secondVariable' => 2, 
- 'thirdVariable' => true
+ 'stringVariable' => 'test string', 
+ 'intVariable' => 2, 
+ 'boolVariable' => true
 ])
 ```
-Note: Make sure all variables pre-defined in your layout and template view files are passed to your Pigeon message.
 
-####Clearing View Variables
+Passing object variables:
+```php
+$user = new User();
+$user->first_name = 'John';
+$user->last_name = 'Doe';
+Pigeon::pass([
+ 'userObjectVariable' => $user
+])
+```
+
+If ```pass()``` is used more than once it will merge previously passed variables with the current passed set.
+
+>Note: Make sure all variables pre-defined in your layout and template view files are passed to your Pigeon message.
+
+####Clearing View Variables:
+
+Clear all previously passed view variables
+
 ```php
 Pigeon::clear()
 ```
@@ -154,12 +179,49 @@ See http://laravel.com/docs/5.0/mail#mail-and-local-development
 Custom message types will be configured in the `config/pigeon.php` file. In this file you can find examples on how 
 to properly set up a custom message type.
 
+#### Default:
+
+Set your defaults for all messages sent with Pigeon in ```config\pigeon.php```
+
+```php
+'default' => [
+    'to' => [],
+    'cc' => [],
+    'bcc' => [],
+    'replyTo' => [],
+    'from' => [], // if nothing is entered here, your mail.php default will still be used
+    'sender' => [],
+    'attachments' => [],
+    'subject' => 'Pigeon Delivery',
+    'layout' => 'emails.layouts.default',
+    'template' => 'emails.templates.default',
+    'message_variables' => []
+]
+```
+
 ####Load Custom Message:
+
+Set your defaults for a particular message type to be sent with Pigeon in ```config\pigeon.php```
+
+```php
+'custom_message_type' => [
+    'from' => ['from@myapp.com' => 'My Custom App'],
+    'subject' => 'My Pigeon Custom Message',
+    'layout' => 'emails.layouts.default',
+    'template' => 'emails.templates.default'
+]
+```
+
+This will load all the message properties from your config defined for `custom_message_type`.
+
 ```php
 Pigeon::type('custom_message_type');
 ```
 
-This will load all the message properties from your config defined for `custom_message_type`.
+#### Order of Loading:
+
+Default -> Custom Message (if set and loaded) -> Properties set with individual Pigeon functions
+
 
 ### Sending the Message
 
@@ -169,12 +231,13 @@ Pigeon::send();
 ```
 
 ####Send Raw Message:
+
+Pass a string as a param for the send() function and it will use the string as a raw message send and will ignore any
+view files or view variables assigned.
+
 ```php
 Pigeon::send('This is my raw message');
 ```
-
-Using a raw message will ignore any view files set and variables passed and only send whats in string param passed.
-
 
 ### Example - Using it all together
 
@@ -199,17 +262,17 @@ Pigeon::to('me@domain.com')->subject('Testing Pigeon')->send('Sending myself a q
 ### Example - Sending a custom message
 
 ```php
-Pigeon::type('test_message')->to('me@domain.com')->send();
+Pigeon::type('custom_message_type')->to('me@domain.com')->send();
 ```
 
 ## Usage as a Passed Dependency
 
 To pass Pigeon as a dependency will will pass the interface `Larablocks\Pigeon\PigeonInterface`. For now the only library 
-that implements this interface is `Larablocks\Pigeon\SwiftMailer` but we want to allow for other mailing libraries to be used in the future.
-The `config/pigeon.php` config file for Pigeon automatically sets SwiftMailer as the default mailer library for you.
+that implements this interface is `Larablocks\Pigeon\IlluminateMailer` provided by Laravel but we want to allow for other mailing libraries to be used in the future.
+The `config/pigeon.php` config file for Pigeon automatically sets IlluminateMailer as the default mailer library for you.
 
 ```php
-'library' => 'SwiftMailer',
+'library' => 'IlluminateMailer',
 ```
 
 ###Passing Pigeon to a constructor:
@@ -228,7 +291,7 @@ $this->pigeon->to('me@domain.com')->subject('Pigeon Raw Test Message')->send('Se
 
 ###Starting a new custom message type:
 ```php
-$this->pigeon->type('test_message')->to('me@domain.com')->send();
+$this->pigeon->type('custom_message_type')->to('me@domain.com')->send();
 ```
 
 ## License

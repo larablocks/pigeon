@@ -51,6 +51,21 @@ abstract class MessageAbstract
      */
     protected $subject;
 
+
+    /**
+     * From Addresses
+     *
+     * @string
+     */
+    protected $from = [];
+
+    /**
+     * Sender Addresses
+     *
+     * @string
+     */
+    protected $sender = [];
+
     /**
      * To Addresses
      *
@@ -116,40 +131,51 @@ abstract class MessageAbstract
     }
 
     /**
-     * Get Message Type
+     * Get Current Message Type
      *
-     * @return null
+     * @return string
      */
     public function getType()
     {
-       return $this->message_type;
+        return $this->message_type;
     }
 
     /**
-     * Set Email Layout
+     * Set From
      *
-     * @param $layout_path
-     * @return $this|object
+     * @param $address
+     * @param null $name
+     * @return $this
      */
-    public function layout($layout_path)
+    public function from($address, $name = null)
     {
-        $this->message_layout->setViewLayout($layout_path);
+        if (is_array($address)) {
+            $this->addAddressArray($address, 'from');
+        } else {
+            $this->from[$address] = $name;
+        }
 
         return $this;
     }
 
     /**
-     * Set Email Template
+     * Set Sender
      *
-     * @param $template_path
-     * @return $this|object
+     * @param $address
+     * @param null $name
+     * @return $this
      */
-    public function template($template_path)
+    public function sender($address, $name = null)
     {
-        $this->message_layout->setViewTemplate($template_path);
+        if (is_array($address)) {
+            $this->addAddressArray($address, 'sender');
+        } else {
+            $this->sender[$address] = $name;
+        }
 
         return $this;
     }
+
 
     /**
      * Set To
@@ -237,6 +263,32 @@ abstract class MessageAbstract
     }
 
     /**
+     * Set Email Layout
+     *
+     * @param $layout_path
+     * @return $this|object
+     */
+    public function layout($layout_path)
+    {
+        $this->message_layout->setViewLayout($layout_path);
+
+        return $this;
+    }
+
+    /**
+     * Set Email Template
+     *
+     * @param $template_path
+     * @return $this|object
+     */
+    public function template($template_path)
+    {
+        $this->message_layout->setViewTemplate($template_path);
+
+        return $this;
+    }
+
+    /**
      * Pass Message variables
      *
      * @param array $message_variables
@@ -288,6 +340,12 @@ abstract class MessageAbstract
         return $this;
     }
 
+    /**
+     * Add Attachment
+     *
+     * @param $pathToFile
+     * @param array $options
+     */
     private function addAttachment($pathToFile, array $options = [])
     {
         $attachment['path'] = $pathToFile;
@@ -414,11 +472,15 @@ abstract class MessageAbstract
     private function resetMessage()
     {
         $this->subject = '';
+        $this->from = [];
+        $this->sender = [];
         $this->to = [];
         $this->cc = [];
         $this->bcc = [];
         $this->reply_to = [];
         $this->attachments = [];
+        $this->message_layout->setViewLayout('');
+        $this->message_layout->setViewTemplate('');
         $this->message_layout->clearVariables();
     }
 }
