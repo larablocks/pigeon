@@ -1,14 +1,12 @@
 Pigeon
 ===============
 
-[![Build Status](https://travis-ci.org/larablocks/pigeon.svg)](https://travis-ci.org/larablocks/pigeon)s
-[![Latest Stable Version](https://poser.pugx.org/larablocks/pigeon/v/stable)](https://packagist.org/packages/larablocks/pigeon)
-[![License](https://poser.pugx.org/larablocks/pigeon/license)](https://packagist.org/packages/larablocks/pigeon)
+[![Build Status](https://travis-ci.org/larablocks/pigeon.svg)](https://travis-ci.org/larablocks/pigeon)
 
-A more flexible email message builder for Laravel 5.0+ including chained methods, reusable message type configurations, and email layout and template view management.
+A more flexible email message builder for Laravel 5 including chained methods, reusable message type configurations, and email layout and template view management.
 
 > Note: All Larablocks packages will have releases in line with the major Laravel framework version release. 
-(Ex. Pigeon 5.1.* is tested to work with Laravel 5.1.* while Pigeon 5.0.* is tested to worked with Laravel 5.0.*)
+(Ex. Pigeon 5.0.* will work with Laravel 5.0.*)
 
 ## Installation
 
@@ -17,7 +15,7 @@ Add `larablocks/pigeon` as a requirement to `composer.json`:
 ```javascript
 {
     "require": {
-        "larablocks/pigeon": "5.1.*"
+        "larablocks/pigeon": "5.0.*"
     }
 }
 ```
