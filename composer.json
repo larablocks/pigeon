@@ -31,10 +31,5 @@
         "psr-4": {
             "Larablocks\\Pigeon\\PHPUnit\\": "tests"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "5.0.x-dev"
-        }
     }
 }
