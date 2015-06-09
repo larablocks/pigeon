@@ -1,4 +1,6 @@
-<?php namespace Larablocks\Pigeon;
+<?php
+
+namespace Larablocks\Pigeon;
 
 use ErrorException;
 use Illuminate\Config\Repository as Config;

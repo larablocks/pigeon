@@ -1,4 +1,6 @@
-<?php namespace Larablocks\Pigeon;
+<?php
+
+namespace Larablocks\Pigeon;
 
 use Illuminate\Support\Facades\Facade;
 

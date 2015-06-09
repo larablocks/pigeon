@@ -1,4 +1,6 @@
-<?php namespace Larablocks\Pigeon;
+<?php
+
+namespace Larablocks\Pigeon;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
@@ -13,6 +15,8 @@ class PigeonServiceProvider extends ServiceProvider
 
     public function register()
     {
+        //require __DIR__ . '/../../../../../vendor/autoload.php';
+
         // Bind the library desired to the interface
         $this->app->bind('Larablocks\Pigeon\PigeonInterface', 'Larablocks\Pigeon\\'.config('pigeon.library'));
 
