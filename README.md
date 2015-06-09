@@ -1,7 +1,7 @@
 Pigeon
 ===============
 
-[![Build Status](https://travis-ci.org/larablocks/pigeon.svg)](https://travis-ci.org/larablocks/pigeon)s
+[![Build Status](https://travis-ci.org/larablocks/pigeon.svg)](https://travis-ci.org/larablocks/pigeon)
 [![Latest Stable Version](https://poser.pugx.org/larablocks/pigeon/v/stable)](https://packagist.org/packages/larablocks/pigeon)
 [![License](https://poser.pugx.org/larablocks/pigeon/license)](https://packagist.org/packages/larablocks/pigeon)
 
