@@ -15,6 +15,7 @@ class PigeonServiceProvider extends ServiceProvider
 
     public function register()
     {
+        // Required for testing
         //require __DIR__ . '/../../../../../vendor/autoload.php';
 
         // Bind the library desired to the interface
