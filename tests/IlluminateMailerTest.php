@@ -12,19 +12,9 @@ class IlluminateMailerTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function testPretendCanBeSet()
-    {
-        $mailer = new IlluminateMailer($this->getMailerMock(), $this->getLayoutMock(), $this->getConfigMock(), $this->getLoggerMock());
-
-        $this->assertEquals($mailer, $mailer->pretend());
-        $this->assertEquals($mailer, $mailer->pretend(false));
-        $this->assertFalse($mailer->pretend(2));
-    }
-
     public function testMessageWithLayoutCanBeSent()
     {
         $mailer = $this->getMailerMock();
-        $mailer->shouldReceive('pretend')->twice()->andReturn(true);
         $mailer->shouldReceive('send')->once()->andReturn(true);
 
         $layout = $this->getLayoutMock();
@@ -40,7 +30,6 @@ class IlluminateMailerTest extends PHPUnit_Framework_TestCase
     public function testRawMessageCanBeSent()
     {
         $mailer = $this->getMailerMock();
-        $mailer->shouldReceive('pretend')->twice()->andReturn(true);
         $mailer->shouldReceive('raw')->once()->andReturn(true);
 
         $layout = $this->getLayoutMock();

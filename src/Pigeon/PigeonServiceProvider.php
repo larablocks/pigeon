@@ -16,7 +16,7 @@ class PigeonServiceProvider extends ServiceProvider
     public function register()
     {
         // Required for testing
-        //require __DIR__ . '/../../../../../vendor/autoload.php';
+        //require __DIR__ . '../../../bootstrap/autoload.php';
 
         // Bind the library desired to the interface
         $this->app->bind('Larablocks\Pigeon\PigeonInterface', 'Larablocks\Pigeon\\'.config('pigeon.library'));
