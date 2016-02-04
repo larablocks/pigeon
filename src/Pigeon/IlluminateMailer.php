@@ -31,6 +31,13 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
     private $logger;
 
     /**
+     * Pretend On/Off
+     *
+     * @var bool
+     */
+    protected $pretend = false;
+
+    /**
      * Illuminate Mailer Constructor
      *
      * @param Mailer $mailer
@@ -54,6 +61,9 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
      */
     public function send($raw_message = null)
     {
+        // Set pretend value
+        $this->mailer->pretend($this->pretend);
+
         // Set Optional Message Data
         if (!is_null($raw_message)) {
             $send_result = $this->sendRawMessage($raw_message);
@@ -63,6 +73,9 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
 
         // Reset to default after send
         $this->restoreDefaultMessageType();
+
+        // Turn pretend back to global config after send
+        $this->mailer->pretend($this->config->get('mail.pretend'));
 
         return (bool) $send_result;
     }
@@ -149,5 +162,22 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
         }
 
         return $send_result;
+    }
+
+    /**
+     * Use Laravel pretend method and send mail to log file instead
+     *
+     * @param bool $value
+     * @return Mailer
+     */
+    public function pretend($value = true)
+    {
+        if (!is_bool($value)) {
+           return false;
+        }
+
+        $this->pretend = $value;
+
+        return $this;
     }
 }

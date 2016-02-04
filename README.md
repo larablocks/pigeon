@@ -5,10 +5,10 @@ Pigeon
 [![Latest Stable Version](https://poser.pugx.org/larablocks/pigeon/v/stable)](https://packagist.org/packages/larablocks/pigeon)
 [![License](https://poser.pugx.org/larablocks/pigeon/license)](https://packagist.org/packages/larablocks/pigeon)
 
-A more flexible email message builder for Laravel 5.0 - 5.2 including chained methods, reusable message type configurations, and email layout and template view management.
+A more flexible email message builder for Laravel 5.0+ including chained methods, reusable message type configurations, and email layout and template view management.
 
 > Note: All Larablocks packages will have releases in line with the major Laravel framework version release. 
-(Ex. Pigeon 5.2.* is tested to work with Laravel 5.2.* while Pigeon 5.1.* is tested to worked with Laravel 5.1.*)
+(Ex. Pigeon 5.1.* is tested to work with Laravel 5.1.* while Pigeon 5.0.* is tested to worked with Laravel 5.0.*)
 
 ## Installation
 
@@ -17,7 +17,7 @@ Add `larablocks/pigeon` as a requirement to `composer.json`:
 ```javascript
 {
     "require": {
-        "larablocks/pigeon": "~5.2.*"
+        "larablocks/pigeon": "5.1.*"
     }
 }
 ```
@@ -167,6 +167,14 @@ Clear all previously passed view variables
 ```php
 Pigeon::clear()
 ```
+
+###Using Pretend:
+```php
+Pigeon::pretend()
+```
+
+This will set the pretend function of Swift Mailer to true so message will be not actually be mailed.
+See http://laravel.com/docs/5.0/mail#mail-and-local-development
 
 ### Custom Messages Types
 
