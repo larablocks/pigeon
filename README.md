@@ -17,7 +17,7 @@ Add `larablocks/pigeon` as a requirement to `composer.json`:
 ```javascript
 {
     "require": {
-        "larablocks/pigeon": "~5.2.*"
+        "larablocks/pigeon": "~5.2"
     }
 }
 ```
@@ -29,13 +29,13 @@ Update your packages with `composer update` or install with `composer install`.
 To wire this up in your Laravel project you need to add the service provider. Open `app.php`, and add a new item to the providers array.
 
 ```php
-'Larablocks\Pigeon\PigeonServiceProvider',
+Larablocks\Pigeon\PigeonServiceProvider::class,
 ```
 
 Then you may add a Facade for more convenient usage. In your `app.php` config file add the following line to the `aliases` array.
 
 ```php
-'Pigeon' => 'Larablocks\Pigeon\Pigeon',
+'Pigeon' => Larablocks\Pigeon\Pigeon::class,
 ```
 
 Note: The Pigeon facade will load automatically, so you don't have to add it to the `app.php` file but you may still want 
