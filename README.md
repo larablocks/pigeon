@@ -2,7 +2,7 @@ Pigeon
 ===============
 
 [![Build Status](https://travis-ci.org/larablocks/pigeon.svg)](https://travis-ci.org/larablocks/pigeon)
-[![Latest Stable Version](https://poser.pugx.org/larablocks/pigeon/v/stable)](https://packagist.org/packages/larablocks/pigeon)
+[![Latest Stable Version](https://poser.pugx.org/larablocks/pigeon/version)](https://packagist.org/packages/larablocks/pigeon)
 [![License](https://poser.pugx.org/larablocks/pigeon/license)](https://packagist.org/packages/larablocks/pigeon)
 
 A more flexible email message builder for Laravel 5 including chained methods, reusable message type configurations, and email layout and template view management.
