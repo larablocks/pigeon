@@ -76,7 +76,7 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
     private function sendMessage()
     {
         try {
-            $send_result = $this->mailer->send($this->message_layout->getViewLayout(), $this->message_layout->getMessageVariables(), function ($message) {
+            $this->mailer->send($this->message_layout->getViewLayout(), $this->message_layout->getMessageVariables(), function ($message) {
 
                 // Set message parts
                 $message->to($this->to)
@@ -106,7 +106,7 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
             return false;
         }
 
-        return $send_result;
+        return true;
     }
 
 
@@ -119,7 +119,7 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
     private function sendRawMessage($message)
     {
         try {
-            $send_result = $this->mailer->raw($message, function ($message) {
+            $this->mailer->raw($message, function ($message) {
 
                 // Set message parts
                 $message->to($this->to)
@@ -148,6 +148,6 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
             return false;
         }
 
-        return $send_result;
+        return true;
     }
 }
