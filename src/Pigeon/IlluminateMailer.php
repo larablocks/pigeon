@@ -78,9 +78,14 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
         try {
             $this->mailer->send($this->message_layout->getViewLayout(), $this->message_layout->getMessageVariables(), function ($message) {
 
+                if (config('pigeon.dev.override')) {
+                    $message->to(config('pigeon.dev.override_email'));
+                } else {
+                    $message->to($this->to);
+                }
+
                 // Set message parts
-                $message->to($this->to)
-                    ->subject($this->subject)
+                $message->subject($this->subject)
                     ->cc($this->cc)
                     ->bcc($this->bcc)
                     ->replyTo($this->reply_to)
@@ -121,9 +126,15 @@ class IlluminateMailer extends MessageAbstract implements PigeonInterface
         try {
             $this->mailer->raw($message, function ($message) {
 
+
+                if (config('pigeon.dev.override')) {
+                    $message->to(config('pigeon.dev.override_email'));
+                } else {
+                    $message->to($this->to);
+                }
+
                 // Set message parts
-                $message->to($this->to)
-                    ->subject($this->subject)
+                $message->subject($this->subject)
                     ->cc($this->cc)
                     ->bcc($this->bcc)
                     ->replyTo($this->reply_to)

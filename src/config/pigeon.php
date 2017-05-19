@@ -11,6 +11,16 @@ return [
     'library' => 'IlluminateMailer',
 
     /*
+     * If you want to have all emails sent through pigeon hijacked and sent to a test email of your choice then
+     * set the .env variables below
+     *
+     */
+    'dev' => [
+      'override' => env('PIGEON_DEV_OVERRIDE', false),
+      'override_email' => env('PIGEON_DEV_OVERRIDE_EMAIL', 'dev@mydomain.com')
+    ],
+
+    /*
      * Choose Default Message Configs that will load for any Pigeon instance.
      * These will be overridden by using a message type or changing variables with
      * Pigeon functions.
